@@ -3,23 +3,18 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var ejs = require ('ejs');
-var path = require('path');
 var mongoose = require('mongoose');
+
+mongoose.Promise = global.Promise;
+
+mongoose.connect('mongodb://localhost/mean-chat')
+  .then(() =>  console.log('connection successful'))
+  .catch((err) => console.error(err));
 
 var chat = require('./routes/chat');
 var app = express();
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/mean-chat').then(() =>  {
-	console.log('connection successful')
-}).catch((err) => {
-	console.error(err)
-});
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
