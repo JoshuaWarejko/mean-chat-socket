@@ -5,17 +5,20 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var ejs = require("ejs");
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost/mean-chat')
+var MongoConnection = require('./config/mongo').connection;
+
+mongoose.connect(MongoConnection.uri, MongoConnection.db, MongoConnection.port, MongoConnection.credentials)
   .then(() =>  console.log('connection successful'))
   .catch((err) => console.error(err));
 
 var chat = require('./routes/chat');
 var app = express();
 
-app.set('view engine', 'html');
+app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
